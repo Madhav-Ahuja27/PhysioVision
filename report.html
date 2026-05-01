@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Fitness Pose Analyzer - Project Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif', Georgia, serif;
+            font-size: 10.5pt;
+            line-height: 1.5;
+            color: #333;
+            text-align: justify;
+            text-align-last: left;
+            string-set: doctitle "";
+        }
+
+        h1 { string-set: doctitle content(); }
+
+        @page {
+            size: A4;
+            margin: 2cm 1.8cm;
+            @top-center { content: string(doctitle); font-size: 9pt; color: #666; }
+            @bottom-center { content: counter(page); font-size: 9pt; color: #666; }
+        }
+
+        @page :first {
+            margin: 0;
+            @top-center { content: none; }
+            @bottom-center { content: none; }
+        }
+
+        @page cover { @top-center { content: none; } @bottom-center { content: none; } }
+
+        .cover {
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            page: cover;
+            page-break-after: always;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50mm;
+            right: -30mm;
+            width: 160mm;
+            height: 160mm;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .cover-accent {
+            position: absolute;
+            top: 30mm;
+            left: 20mm;
+            width: 50mm;
+            height: 3mm;
+            background: #e94560;
+        }
+
+        .cover-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 80%;
+            z-index: 1;
+        }
+
+        .cover-title {
+            font-size: 32pt;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.6cm;
+            letter-spacing: 1px;
+        }
+
+        .cover-subtitle {
+            font-size: 13pt;
+            color: #a0a0b0;
+            margin-bottom: 2.5cm;
+            font-style: italic;
+        }
+
+        .cover-meta {
+            font-size: 11pt;
+            color: #c0c0d0;
+            line-height: 2;
+        }
+
+        .cover-meta p { margin: 0; }
+
+        h1.section-title {
+            font-size: 16pt;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-top: 0;
+            margin-bottom: 0.4cm;
+            border-bottom: 2px solid #e94560;
+            padding-bottom: 0.15cm;
+        }
+
+        h2 {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #333;
+            margin-top: 0.5cm;
+            margin-bottom: 0.2cm;
+        }
+
+        p {
+            margin: 0.25cm 0;
+        }
+
+        ul {
+            margin: 0.2cm 0;
+            padding-left: 1cm;
+        }
+
+        li {
+            margin: 0.1cm 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.35cm 0;
+            font-size: 9.5pt;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        table thead tr {
+            border-top: 2px solid #333;
+            border-bottom: 1px solid #333;
+        }
+
+        table tbody tr:last-child {
+            border-bottom: 2px solid #333;
+        }
+
+        th, td {
+            padding: 0.2cm 0.3cm;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 700;
+            background: #f5f5f5;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        .pipeline {
+            margin: 0.3cm 0;
+            padding: 0.3cm 0.4cm;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            font-size: 9.5pt;
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            margin: 0.15cm 0;
+        }
+
+        .step-box {
+            background: #1a1a2e;
+            color: white;
+            padding: 0.1cm 0.3cm;
+            font-size: 9pt;
+            font-weight: 700;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .step-desc {
+            margin-left: 0.4cm;
+        }
+
+        .arrow {
+            margin: 0.05cm 0 0.05cm 35px;
+            color: #e94560;
+            font-size: 11pt;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 9.5pt;
+            background: #f5f5f5;
+            padding: 0.03cm 0.1cm;
+        }
+
+        pre, table, figure, img, svg, blockquote {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        a {
+            word-break: break-all;
+            color: #0f3460;
+        }
+
+        .tech-row {
+            font-size: 9.5pt;
+            background: #f5f5f5;
+            padding: 0.15cm 0.3cm;
+            margin: 0.1cm 0;
+            border-left: 3px solid #0f3460;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cover">
+    <div class="cover-accent"></div>
+    <div class="cover-content">
+        <h1 class="cover-title">AI Fitness Pose Analyzer</h1>
+        <p class="cover-subtitle">Computer Vision Capstone Project Report</p>
+        <div class="cover-meta">
+            <p>Real-Time Pose Estimation with AI-Powered Form Correction</p>
+            
+        </div>
+    </div>
+</div>
+
+<h1 class="section-title">1. Problem Statement and Motivation</h1>
+
+<p>Home fitness has grown exponentially, yet most people exercise without professional supervision. Incorrect form is a leading cause of workout injuries including muscle strains and joint damage. Hiring trainers is expensive and inaccessible. The <strong>AI Fitness Pose Analyzer</strong> bridges this gap by providing real-time, AI-powered exercise form feedback using only a webcam or static image. It democratizes access to professional-grade form analysis, making safe exercise guidance available to anyone with a camera.</p>
+
+<h1 class="section-title">2. Model and Approach</h1>
+
+<h2>2.1 Pose Estimation: MediaPipe Pose</h2>
+<p>We use Google's pretrained <strong>MediaPipe Pose</strong> model, which detects 33 3D body landmarks in real time via a BlazePose detector-tracker pipeline. It was selected because it runs efficiently on CPU, provides visibility scores for occlusion handling, and requires no additional training data or GPU.</p>
+
+<h2>2.2 AI Feedback: Groq LLM (Llama 3.3 70B)</h2>
+<p>For intelligent form analysis, we use the <strong>Groq API</strong> with Meta's <strong>Llama 3.3 70B Versatile</strong> model. The LLM receives structured angle data and generates physiotherapist-style corrective feedback. This produces natural, contextual guidance rather than rigid template responses, without requiring any labeled training dataset.</p>
+
+<div class="tech-row"><strong>OpenCV 4.8</strong> — Image I/O, visualization, webcam capture</div>
+<div class="tech-row"><strong>MediaPipe 0.10</strong> — 33-landmark pose estimation</div>
+<div class="tech-row"><strong>Groq API</strong> — Llama 3.3 70B for feedback generation</div>
+<div class="tech-row"><strong>NumPy</strong> — Vector math for angle computation</div>
+
+<h1 class="section-title">3. Dataset and Test Data</h1>
+
+<p>MediaPipe Pose is fully pretrained on Google's internal dataset, so no custom dataset collection or model training was required. For validation, we use sample exercise images (squats, lunges, stretches) to verify landmark detection accuracy, angle calculation correctness, and LLM feedback relevance. The system also supports direct webcam input for live real-world validation.</p>
+
+<h1 class="section-title">4. Development Challenges</h1>
+
+<table>
+    <thead>
+        <tr><th>Challenge</th><th>Resolution</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Groq API rate limits (30 req/min)</td><td>5-second rate limiting in webcam mode; batch analysis for images</td></tr>
+        <tr><td>Arctan2 angle wraparound</td><td>Normalization logic to remap reflex angles to acute equivalents</td></tr>
+        <tr><td>Text overlay collisions</td><td>Collision detection with dynamic vertical shifting</td></tr>
+        <tr><td>No API key fallback</td><td>Graceful degradation to local angle reporting when API unavailable</td></tr>
+        <tr><td>LLM latency (500-1500ms)</td><td>Background threads; display last valid feedback during processing</td></tr>
+    </tbody>
+</table>
+
+<h1 class="section-title">5. System Pipeline</h1>
+
+<p>The pipeline has five stages:</p>
+
+<div class="pipeline">
+    <div class="pipeline-step">
+        <div class="step-box">INPUT</div>
+        <div class="step-desc">Static image or live webcam frame (BGR, any resolution)</div>
+    </div>
+    <div class="arrow">&#8595;</div>
+    <div class="pipeline-step">
+        <div class="step-box">STEP 1</div>
+        <div class="step-desc">MediaPipe Pose processes RGB frame; outputs 33 landmarks with visibility scores</div>
+    </div>
+    <div class="arrow">&#8595;</div>
+    <div class="pipeline-step">
+        <div class="step-box">STEP 2</div>
+        <div class="step-desc">NumPy computes joint angles using 2D arctan2 vector geometry on key triplets</div>
+    </div>
+    <div class="arrow">&#8595;</div>
+    <div class="pipeline-step">
+        <div class="step-box">STEP 3</div>
+        <div class="step-desc">Angle dictionary formatted into physiotherapist prompt; sent to Groq LLM</div>
+    </div>
+    <div class="arrow">&#8595;</div>
+    <div class="pipeline-step">
+        <div class="step-box">OUTPUT</div>
+        <div class="step-desc">Annotated image with skeletal overlay, angle labels, and AI feedback panel</div>
+    </div>
+</div>
+
+<p>The system operates in two modes: <em>static mode</em> (<code>inference.py</code>) analyzes a single image end-to-end; <em>webcam mode</em> (<code>inference_webcam.py</code>) runs MediaPipe at camera framerate while LLM feedback updates every 5 seconds via a background thread.</p>
+
+<h1 class="section-title">6. Deliverables</h1>
+
+<table>
+    <thead>
+        <tr><th>Item</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><code>inference.py</code></td><td>Static image analysis with pose detection, angles, and AI feedback</td></tr>
+        <tr><td><code>inference_webcam.py</code></td><td>Real-time webcam demo with threaded LLM feedback overlay</td></tr>
+        <tr><td><code>README.md</code></td><td>Setup, usage, and troubleshooting guide</td></tr>
+        <tr><td><code>requirements.txt</code></td><td>Pinned dependencies for reproducible setup</td></tr>
+        <tr><td>Sample images</td><td>Test pose images for validation without webcam</td></tr>
+        <tr><td>Demo video</td><td>75-second MP4 demonstrating all capabilities</td></tr>
+    </tbody>
+</table>
+
+<p>MediaPipe model weights download automatically on first run. No separate weight download is required.</p>
+
+</body>
+</html>
