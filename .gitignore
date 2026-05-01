@@ -1,0 +1,29 @@
+# Model weights
+yolov8n.pt
+
+# Credentials
+creds.txt
+.env
+
+# Checkpoints
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+venv/
+.venv/
+
+# Databases
+*.db
+*.sqlite
+
+# Node
+node_modules/
+
