@@ -25,6 +25,8 @@ Real-time pose detection system that:
 pip install -r requirements.txt
 ```
 
+**NOTE BY ME -> GROQ IS JUST FOR THE TEXT FEEDBACK, ACTUAL LANDMARKS AND DETECTION IS DONE BY MEDIAPIPE
+**
 ### 2. Get Groq API Key (Free)
 1. Visit https://console.groq.com
 2. Sign up for free account
